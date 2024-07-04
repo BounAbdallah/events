@@ -84,6 +84,8 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
 
 Route::middleware(['auth', 'verified' , 'user'])->group(function () {
     Route::post('/reservations/store/{id_evenement}', [ReservationController::class, 'store'])->name('reservations.store');
+    Route::get('reservations/{evenement}/reserver', [ReservationController::class, 'create'])->name('reservations.create');
+    Route::post('reservations/{evenement}/reserver', [ReservationController::class, 'store'])->name('reservations.store');
 });
 
 
@@ -95,6 +97,6 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
 });
 
 
-Route::get('/reservations/{id}', 'ReservationController@show')->name('reservations.show');
+ 
 
 require __DIR__.'/auth.php';

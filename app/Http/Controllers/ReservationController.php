@@ -9,47 +9,25 @@ use Illuminate\Support\Facades\Auth;
 
 class ReservationController extends Controller
 {
-    public function store($id_evenement)
+    public function create(Evenement $evenement)
     {
-        $existingReservation = Reservation::where('id_evenement', $id_evenement)
-            ->where('id_user', Auth::id())
-            ->first();
+        $user = Auth::user();
+        return view('reservations.create', compact('evenement', 'user'));
+    }
 
-        if ($existingReservation) {
-            return redirect()->route('home')->with('error', 'Vous avez déjà réservé pour cet événement.');
-        }
+    public function store(Request $request, Evenement $evenement)
+    {
+        $user = Auth::user();
 
         Reservation::create([
-            'id_evenement' => $id_evenement,
-            'id_user' => Auth::id(),
-            'statut' => Reservation::STATUS_PENDING,
+            'id_user' => Auth::user()->id,
+            'id_evenement' => $evenement->id,
+            'statut' => 'en attente', // Valeur par défaut
         ]);
 
-        return redirect()->route('home')->with('success', 'Réservation créée avec succès!');
-    }
+        // Envoyer l'email de confirmation ici si nécessaire
 
-    public function edit($id)
-    {
-        $reservation = Reservation::findOrFail($id);
-        return view('reservations.edit', compact('reservation'));
-    }
-
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'statut' => 'required|in:'.Reservation::STATUS_PENDING.','.Reservation::STATUS_CONFIRMED.','.Reservation::STATUS_CANCELED,
-        ]);
-
-        $reservation = Reservation::findOrFail($id);
-        $reservation->statut = $request->statut;
-        $reservation->save();
-
-        return redirect()->route('reservations.index')->with('success', 'Statut de la réservation mis à jour avec succès.');
-    }
-
-    public function index()
-    {
-        $reservations = Reservation::all();
-        return view('reservations.index', compact('reservations'));
+        return redirect()->route('reservations.create', ['evenement' => $evenement->id])
+            ->with('success', 'Votre réservation a été confirmée.');
     }
 }

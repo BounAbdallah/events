@@ -15,6 +15,7 @@
                     document.getElementById('logout-form').submit();">
            Logout
         </a>
+        <a href="{{ route('home') }} ">Accueil</a>
     </nav>
 
     <h1>Welcome User</h1>
