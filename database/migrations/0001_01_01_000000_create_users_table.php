@@ -19,6 +19,22 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+
+            // Champs spécifiques pour les associations
+            $table->string('association_nom')->nullable();
+            $table->text('association_description')->nullable();
+            $table->string('association_logo')->nullable();
+            $table->string('association_localisation')->nullable();
+            $table->integer('association_numero')->nullable();
+            $table->string('association_secteur_activite')->nullable();
+            $table->string('association_ninea')->nullable();
+            $table->string('association_date_creation')->nullable();
+            $table->enum('association_statut', ['active', 'inactive'])->default('inactive');
+
+            // Champs spécifiques pour les admins
+            $table->string('admin_prenom')->nullable();
+            $table->string('admin_nom')->nullable();
+            $table->integer('admin_telephone')->nullable();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
