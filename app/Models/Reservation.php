@@ -4,12 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Notifications\Notifiable; // Importation du trait Notifiable
-use App\Notifications\ReservationMade; // Importation de la notification ReservationMade
+use Illuminate\Notifications\Notifiable;
+use App\Notifications\ReservationMade;
 
 class Reservation extends Model
 {
-    use HasFactory, Notifiable; // Utilisation du trait Notifiable
+    use HasFactory, Notifiable;
 
     const STATUS_PENDING = 'en attente';
     const STATUS_CONFIRMED = 'confirmée';
@@ -34,7 +34,7 @@ class Reservation extends Model
     protected static function booted()
     {
         static::created(function ($reservation) {
-            $reservation->notify(new ReservationMade($reservation)); // Envoi de la notification lors de la création
+            $reservation->notify(new ReservationMade($reservation));
         });
     }
 }

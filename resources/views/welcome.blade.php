@@ -169,6 +169,17 @@ line-height: normal;
 <body>
 
 
+@if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
+@if (session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
 
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">

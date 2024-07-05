@@ -2,10 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Reservation;
+use App\Models\User;
 use App\Models\Evenement;
+use App\Models\Reservation;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Notifications\ReservationMade;
+use Illuminate\Support\Facades\Notification;
+
+
+
 
 class ReservationController extends Controller
 {
@@ -19,13 +26,20 @@ class ReservationController extends Controller
             return redirect()->route('home')->with('error', 'Vous avez déjà réservé pour cet événement.');
         }
 
-        Reservation::create([
+        $reservation = Reservation::create([
             'id_evenement' => $id_evenement,
             'id_user' => Auth::id(),
             'statut' => Reservation::STATUS_PENDING,
         ]);
 
-        return redirect()->route('home')->with('success', 'Réservation créée avec succès!');
+        $evenement = Evenement::findOrFail($id_evenement);  // Récupérer l'événement associé
+
+        // Mail::to($reservation->user->email)
+        //   ->send(new ReservationConfirmationEmail($reservation, $evenement));  // Envoyer l'email avec la réservation et l'événement
+        $user = User::find($reservation->id_user);
+        Notification::send($user, new ReservationMade($reservation));
+
+        return redirect()->route('home')->with('success', 'Réservation créée et email de confirmation envoyé!');
     }
 
     public function edit($id)

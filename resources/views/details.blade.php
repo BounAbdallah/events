@@ -193,6 +193,9 @@ font-weight: 400;
 line-height: normal;
 
 }
+.btn_{
+    color: #D6111A;
+}
 
 </style>
 <body>
@@ -236,7 +239,7 @@ line-height: normal;
     <p><strong>Date de l'evenement </strong> {{ $evenement->date_evenement }}</p>
     <p><strong>Heure de derooulement </strong> {{ $evenement->heure_debut }} - {{ $evenement->heure_fin }}</p>
     <p><strong>Date de l'evenement </strong> {{ $evenement->date_cloture_inscription }}</p>
-    <a href="{{ route('home') }}" class="btn btn-primary">Retour à la liste</a>
+    <a href="{{ route('home') }}" class="btn_ ">Annuler</a>
 
 
         </div>
