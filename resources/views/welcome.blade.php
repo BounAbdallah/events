@@ -164,6 +164,46 @@ font-style: normal;
 font-weight: 600;
 line-height: normal;
 }
+.event-image {
+            width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+        .event-block {
+            width: 100px;
+            height: 100px;
+            background-color: #d9534f;
+            margin-bottom: 40px;
+            margin-left: -100px;
+            border-radius: 10px;
+        }
+        .content-section {
+            margin-top: 50px;
+        }
+        .offers-title {
+            text-align: center;
+            font-weight: bold;
+            color: #002366;
+            margin-bottom: 30px;
+        }
+        .event-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .event-list li {
+            margin-bottom: 10px;
+            color: #002366;
+            font-weight: bold;
+        }
+        .offres{
+            display: flex;
+        }
+        .block2{
+            margin-left: -100px;
+        }
+        .block3{
+            margin-left: -100px;
+        }
     </style>
 </head>
 <body>
@@ -264,7 +304,38 @@ line-height: normal;
         </div>
     </section>
 
-    <section>
+    <div class="container content-section">
+        <h2 class="offers-title">Nos Offres</h2>
+        <div class="row offres">
+            <div class="col-md-3 block1">
+            <div class="event-block"></div>
+                <div class="event-block"></div>
+                <div class="event-block"></div>
+                <div class="event-block"></div>
+            </div>
+            <div class="col-md-3 block2">
+                <div class="event-block"></div>
+                <div class="event-block"></div>
+                <div class="event-block"></div>
+            </div>
+            <div class="col-md-3 block3">
+                <div class="event-block"></div>
+                <div class="event-block"></div>
+            </div>
+            <div class="col-md-3">
+                <h4>Des événements sur :</h4>
+                <ul class="event-list">
+                    <li>La prise de parole en public</li>
+                    <li>La maîtrise de l’art</li>
+                    <li>Ateliers Culturels</li>
+                    <li>L’essor de la technologie</li>
+                    <li>Comment faire partie du progrès</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- <section>
     <h3>Nos Offres</h3>
         <div class="offres">
 
@@ -292,7 +363,7 @@ line-height: normal;
             </div>
             </div>
         </div>
-    </section>
+    </section> -->
 
     <script>
         // Optionnel : Pour s'assurer que le carrousel démarre automatiquement au chargement de la page

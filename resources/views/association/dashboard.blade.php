@@ -200,7 +200,8 @@ background: #1E4C72;
             <div class="association-logo">
                 <img src="{{ asset('path/to/your/logo/directory/' . $user->association_logo) }}" alt="Logo de l'association">
             </div>
-        @endif    </div>
+        @endif    
+    </div>
     <div class="navigations">
         <div class="btn-navig">
         <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" fill="none">
