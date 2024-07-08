@@ -4,6 +4,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EvenementController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\DashboardAdminController;
 use App\Http\Controllers\AssociationStatusController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\DashboardAssociationController;
@@ -66,18 +67,29 @@ Route::get('/dashboard/association', function () {
 
 Route::resource('/dashboard/association', DashboardAssociationController::class);
 
+// routes/web.php
 
 Route::middleware(['auth', 'verified', 'association', 'checkAssociationStatus'])->group(function () {
     Route::post('/reservations/store/{id_evenement}', [ReservationController::class, 'store'])->name('reservations.store');
-    Route::get('/reservations', [ReservationController::class, 'index'])->name('reservations.index');
-    Route::get('/reservations/{id}/edit', [ReservationController::class, 'edit'])->name('reservations.edit');
+    // Route::get('/reservations', [ReservationController::class, 'show'])->name('reservations.index');
+    Route::get('/reservations/{id}', [ReservationController::class, 'show'])->name('reservations.show');
+    Route::get('/events/{id}/manage', [EvenementController::class, 'manageReservations'])->name('events.manage');
     Route::put('/reservations/{id}', [ReservationController::class, 'update'])->name('reservations.update');
+    Route::get('/liste_reservations', [ReservationController::class, 'reservation'])->name('association.reservation');
+    Route::get('/reservations/{id}/edit', [ReservationController::class, 'edit'])->name('reservations.edit');
+    Route::get('/reservations/search', [ReservationController::class, 'search'])->name('reservations.search');
+    Route::put('/reservations/{id}', [ReservationController::class, 'update'])->name('reservations.update');
+    Route::get('/reservations/{id_evenement}', [ReservationController::class, 'show'])->name('reservations.show');
 });
 
+         
 
 
 Route::middleware(['auth', 'verified', 'admin'])->group(function () {
     Route::get('/admin/users', [RegisteredUserController::class, 'index'])->name('admin.users.index');
+    // web.php
+Route::get('/admin/dashboard', [DashboardAdminController::class, 'index'])->name('admin.dashboard');
+
     Route::get('/admin/users/{id}/edit', [RegisteredUserController::class, 'editRole'])->name('admin.users.edit');
     Route::put('/admin/users/{id}', [RegisteredUserController::class, 'updateRole'])->name('admin.users.update');
 });
@@ -98,3 +110,4 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
 Route::get('/reservations/{id}', 'ReservationController@show')->name('reservations.show');
 
 require __DIR__.'/auth.php';
+

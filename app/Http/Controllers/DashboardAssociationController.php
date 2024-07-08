@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Evenement;
+use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -11,7 +13,10 @@ class DashboardAssociationController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $evenements = Evenement::all();
+        $evenements =Evenement::where('date_evenement', '>=', Carbon::now())
+        ->orderBy('date_evenement')
+        ->limit(4) // Limitez le nombre d'événements à afficher si nécessaire
+        ->get();
         return view('association.dashboard', compact('evenements', 'user'));
     }
 
@@ -69,6 +74,13 @@ class DashboardAssociationController extends Controller
         return view('association.events.details', compact('evenement'));
     }
 
+    public function reservation()
+    {
+        $reservations = Reservation::paginate(15);
+        return view('association.reservation', compact('reservations'));
+    }
+    
+
     public function edit($id)
     {
         $evenement = Evenement::findOrFail($id);
@@ -121,7 +133,7 @@ class DashboardAssociationController extends Controller
         $evenement->statut = $request->statut;
         $evenement->save();
 
-        return redirect()->route('events.index')->with('success', 'Événement modifié avec succès.');
+        return redirect()->route('/dashboard/association')->with('success', 'Événement modifié avec succès.');
     }
 
     public function destroy($id)
@@ -137,6 +149,6 @@ class DashboardAssociationController extends Controller
         // Supprimer l'événement de la base de données
         $evenement->delete();
 
-        return redirect()->route('events.index')->with('success', 'Événement supprimé avec succès.');
+        return redirect()->route('association.reservation')->with('success', 'Événement supprimé avec succès.');
     }
 }

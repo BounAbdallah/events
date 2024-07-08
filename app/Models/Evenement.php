@@ -38,6 +38,16 @@ class Evenement extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'association_id');
+        return $this->belongsTo(User::class, 'association_id'); 
+    }
+
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class, 'id_evenement');
+    }
+
+    public function getPlacesDisponiblesAttribute()
+    {
+        return $this->nombre_places - $this->reservations()->count();
     }
 }

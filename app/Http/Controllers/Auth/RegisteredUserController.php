@@ -101,7 +101,7 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('association.dashboard');
+        return redirect()->intended('/dashboard/association');
     }
 
     /**
