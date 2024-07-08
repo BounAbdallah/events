@@ -12,7 +12,7 @@ class HomeController extends Controller
     {
         $evenements = Evenement::where('date_evenement', '>=', Carbon::now())
                                ->orderBy('date_evenement')
-                               ->limit(3) // Limitez le nombre d'événements à afficher si nécessaire
+                               ->limit(6) // Limitez le nombre d'événements à afficher si nécessaire
                                ->get();
 
         return view('welcome', compact('evenements'));

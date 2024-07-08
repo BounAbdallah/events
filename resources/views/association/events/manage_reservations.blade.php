@@ -1,6 +1,8 @@
 
 
 
+
+
 <style>
 
 
@@ -497,31 +499,49 @@ line-height: normal;
 <x-side-barAssoc />
 
 <div class="container">
-<main class="main">
+<h2>Gestion des réservations pour {{ $evenement->nom }}</h2>
 
+<main class="main">
+    
+<div class="search-bar">
+        <form action="#" method="GET">
+            <input type="text" name="query" value="" placeholder="Rechercher un nom, une date...">
+            <button type="#">Rechercher</button>
+        </form>
+    </div>
 
     <div class="table-container">
         <table>
             <thead>
-            <tr>
-                    <th>Titre</th>
-                    <th>Lieu</th>
-                    <th>Date</th>
-                    <th>Places disponibles</th>
-                    <th>Action</th>
+                <tr>
+                    <th>Date de réservation</th>
+                    <th>Prénom et Nom</th>
+                    <th>Email</th>
+                    <th>Evenement</th>
+                    <th>Statut</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($evenements as $evenement)
-                    <tr>
-                        <td>{{ $evenement->nom }}</td>
-                        <td>{{ $evenement->lieu }}</td>
-                        <td>{{ $evenement->date_evenement }}</td>
-                        <td>{{ $evenement->places_disponibles }} / {{ $evenement->nombre_places }}</td>
-                        <td>
-                            <a href="{{ route('events.manage', $evenement->id) }}" class="btn btn-primary">Gérer</a>
-                        </td>
-                    </tr>
+                @foreach ($reservations as $reservation)
+                <tr>
+                    <td>{{ $reservation->created_at }}</td>
+                    <td>{{ $reservation->user->name }}</td>
+                    <td>{{ $reservation->user->email }}</td>
+                    <td>{{ $reservation->evenement->nom }}</td>
+                    <td>{{ $reservation->statut }}</td>
+                    <td>
+                        <form action="{{ route('reservations.update', $reservation->id) }}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <select name="statut" onchange="this.form.submit()">
+                                <option value="{{ \App\Models\Reservation::STATUS_PENDING }}" {{ $reservation->statut == \App\Models\Reservation::STATUS_PENDING ? 'selected' : '' }}>En attente</option>
+                                <option value="{{ \App\Models\Reservation::STATUS_CONFIRMED }}" {{ $reservation->statut == \App\Models\Reservation::STATUS_CONFIRMED ? 'selected' : '' }}>Confirmée</option>
+                                <option value="{{ \App\Models\Reservation::STATUS_CANCELED }}" {{ $reservation->statut == \App\Models\Reservation::STATUS_CANCELED ? 'selected' : '' }}>Annulée</option>
+                            </select>
+                        </form>
+                    </td>
+                </tr>
                 @endforeach
             </tbody>
         </table>

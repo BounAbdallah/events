@@ -1,3 +1,6 @@
+
+<x-bar-navigation/>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,3 +24,4 @@
     <h1>Welcome User</h1>
 </body>
 </html>
+

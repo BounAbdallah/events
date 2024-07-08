@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Evenement;
+use App\Models\Reservation;
 use Illuminate\Http\Request;
 
 class EvenementController extends Controller
@@ -42,7 +43,7 @@ class EvenementController extends Controller
         }
     
         Evenement::create([
-            'association_id' => auth()->user()->id, 
+            // 'association_id' => auth()->user()->id, 
             'nom' => $request->nom,
             'description' => $request->description,
             'lieu' => $request->lieu,
@@ -56,7 +57,7 @@ class EvenementController extends Controller
             'statut' => $request->statut,
         ]);
     
-        return redirect()->route('events.index')->with('success', 'Événement créé avec succès.');
+        return redirect()->intended('/dashboard/association')->with('success', 'Événement créé avec succès.');
     }
     
     public function show($id)
@@ -115,7 +116,7 @@ class EvenementController extends Controller
             'association_id' => auth()->user()->id, // Mise à jour de l'association_id
         ]);
 
-        return redirect()->route('events.index')->with('success', 'Événement modifié avec succès.');
+        return redirect()->intended('/dashboard/association')->with('success', 'Événement modifié avec succès.');
     }
 
     public function destroy($id)
@@ -131,6 +132,30 @@ class EvenementController extends Controller
         // Supprimer l'événement de la base de données
         $evenement->delete();
 
-        return redirect()->route('events.index')->with('success', 'Événement supprimé avec succès.');
+        return redirect()->intended('/dashboard/association')->with('success', 'Événement supprimé avec succès.');
     }
+
+    public function manageReservations($id)
+    {
+        $evenement = Evenement::findOrFail($id);
+        $reservations = Reservation::where('id_evenement', $id)->get();
+
+        return view('association.events.manage_reservations', compact('evenement', 'reservations'));
+    }
+
+    public function search(Request $request)
+{
+    $query = $request->input('query');
+
+    $reservations = Reservation::whereHas('user', function ($queryBuilder) use ($query) {
+        $queryBuilder->where('name', 'like', "%$query%");
+    })
+    ->orWhereHas('evenement', function ($queryBuilder) use ($query) {
+        $queryBuilder->where('nom', 'like', "%$query%");
+    })
+    ->orWhereDate('created_at', 'like', "%$query%")
+    ->paginate(10);
+
+    return view('association.reservation', compact('reservations'));
+}
 }
