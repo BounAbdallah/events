@@ -4,13 +4,22 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Evenement;
+use App\Models\Reservation;
 
 class DashboardController extends Controller
 {
 
     public function index()
     {
-        $user = Auth::user();
-        return view('user.dashboard', compact('user'));
+        $evenements = Evenement::all();
+        return view('user.dasboard', compact('evenements'));
     }
+
+    public function show($id)
+    {
+        $evenement = Evenement::findOrFail($id);
+        return view('user.dashboard', compact('evenement'));
+    }
+
 }

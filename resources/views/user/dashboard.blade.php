@@ -147,22 +147,23 @@
 
         <h4><i class="fas fa-calendar-check"></i> Mes réservations</h4>
         <div class="row">
-            @foreach (['confirmed', 'refused'] as $status)
+          @foreach ($evenements as $evenement)
+              
+
                 <div class="col-md-6">
                     <div class="reservation-card">
                         <img src="https://via.placeholder.com/500x300" alt="Image de l'événement">
                         <div class="details">
-                            <h5><i class="fas fa-calendar-alt"></i> Takussanou Baabel</h5>
+                            <h5><i class="fas fa-calendar-alt"></i> Titre : {{$evenement->nom}}</h5>
                             <p><i class="fas fa-clock"></i> Date : 10/09/2024</p>
                             <p><i class="fas fa-clock"></i> Heure : 17:30 - 22:30</p>
                             <p><i class="fas fa-map-marker-alt"></i> Lieu : Dakar, Liberté 3</p>
                             <p><i class="fas fa-users"></i> Places : 150/200</p>
-                            <p><i class="fas fa-info-circle"></i> Status : {{ $status === 'confirmed' ? 'Confirmé' : 'Refusé' }}</p>
                             <a href="#" class="btn btn-primary"><i class="fas fa-info-circle"></i> Détails de l'événement</a>
                         </div>
                     </div>
                 </div>
-            @endforeach
+                @endforeach
         </div>
     </div>
 </body>

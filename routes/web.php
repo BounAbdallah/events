@@ -98,7 +98,7 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
 });
  
 // Route pour afficher le tableau de bord de l'utilisateur
-Route::get('/user/dashboard', [DashboardController::class, 'edit'])->name('dashboard.edit')->middleware('auth');
+Route::get('/user/dashboard', [DashboardController::class, 'index'])->name('dashboard.index')->middleware('auth');
 
 // Route pour mettre à jour le profil depuis le tableau de bord
 Route::patch('/user/dashboard/update', [DashboardController::class, 'update'])->name('dashboarduser.update')->middleware('auth');
