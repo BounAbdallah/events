@@ -172,8 +172,8 @@ line-height: normal;
     
     <form action="{{ route('reservations.store', $evenement->id) }}" method="POST" class="custom-form">
     @csrf
-    <button type="submit" class="custom-button">Réserver</button>
-</form>
+    <a href="{{ route('reservations.create', $evenement->id) }}" class="btn btn-reserve">Réserver ma place</a>
+    </form>
 
         </div>
     </div>

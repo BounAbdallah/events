@@ -14,8 +14,9 @@ use Illuminate\Support\Facades\Notification;
 
 class ReservationController extends Controller
 {
-    public function store($id_evenement)
+    public function create(Evenement $evenement)
     {
+
         $evenement = Evenement::findOrFail($id_evenement);
 
         if ($evenement->places_disponibles <= 0) {
@@ -50,20 +51,24 @@ class ReservationController extends Controller
 
 
     public function edit($id)
-    {
-        $reservation = Reservation::findOrFail($id);
-        return view('reservations.edit', compact('reservation'));
+
+        $user = Auth::user();
+        return view('reservations.create', compact('evenement', 'user'));
     }
 
-    public function update(Request $request, $id)
+    public function store(Request $request, Evenement $evenement)
+
     {
-        $request->validate([
-            'statut' => 'required|in:'.Reservation::STATUS_PENDING.','.Reservation::STATUS_CONFIRMED.','.Reservation::STATUS_CANCELED,
+        $user = Auth::user();
+
+        Reservation::create([
+            'id_user' => Auth::user()->id,
+            'id_evenement' => $evenement->id,
+            'statut' => 'en attente', // Valeur par défaut
         ]);
 
-        $reservation = Reservation::findOrFail($id);
-        $reservation->statut = $request->statut;
-        $reservation->save();
+        // Envoyer l'email de confirmation ici si nécessaire
+
 
         return redirect()->intended('events')->with('success', 'Statut de la réservation mis à jour avec succès.');
     }
@@ -100,3 +105,9 @@ class ReservationController extends Controller
 
     
 }
+
+        return redirect()->route('reservations.create', ['evenement' => $evenement->id])
+            ->with('success', 'Votre réservation a été confirmée.');
+    }
+}
+
