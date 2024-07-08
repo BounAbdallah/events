@@ -174,6 +174,24 @@ border-radius: 12px;
 background: #01054E;
 color: #FFF;
 }
+.compteur-item span{
+    color: var(--couleur-primaire, #FFF);
+text-align: center;
+font-family: Montserrat;
+font-size: 48px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+}
+.compteur-item p{
+    color: var(--couleur-primaire, #FFF);
+text-align: center;
+font-family: Montserrat;
+font-size: 20px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+}
 </style>
 <div class="body">
 @if (session('success'))
@@ -190,40 +208,30 @@ color: #FFF;
 <div class="nav-bar">
 
 </div>
+<div class="user">
+@auth
+    <p>{{ Auth::user()->name }} Bienvenue dans votre espace de travail!</p>
+@endauth
+</div>
 <div class="competeur">
-        <div class="container">
-        <h1>Tableau de bord administrateur</h1>
-
-        <div>
-            <h3>Statistiques</h3>
-            <p>Nombre total d'utilisateurs : {{ $totalUsers }}</p>
-            <p>Nombre total d'événements : {{ $totalEvenements }}</p>
+        <div class="compteur-item">
+            <span>{{ $inactiveAssociationsCount }}</span>
+            <p>Association Inactive</p>
         </div>
-
-        <div>
-            <h3>Les 5 derniers événements</h3>
-            <ul>
-                @foreach($latestEvenements as $evenement)
-                    <li>{{ $evenement->nom }} - {{ $evenement->statut }}</li>
-                @endforeach
-            </ul>
+        <div class="compteur-item">
+            <span>{{$activeAssociationsCount}}</span>
+            <p>Association valide</p>
         </div>
-
-        <div>
-            <h3>Les 10 derniers utilisateurs</h3>
-            <ul>
-                @foreach($latestUsers as $user)
-                    <li>{{ $user->name }} - {{ $user->role }}</li>
-                @endforeach
-            </ul>
+        <div class="compteur-item">
+            <span>{{$totalEvenements}}</span>
+            <p>Evenement total</p>
         </div>
-    </div>
         </div>
 <div class="page">
     
 <div class="liste_association">
 <section class="pending-associations">
-                <h2>Associations En attente de validation</h2>
+                <h2>Liste des Association en attente de validation</h2>
                 <table class="associations-table">
                     <thead>
                         <tr>
@@ -233,14 +241,18 @@ color: #FFF;
                         </tr>
                     </thead>
                     <tbody>
+                    <tbody>
+       @foreach($inactiveAssociations as $inactiveAssoc) 
+
                         <tr>
-                            <td>142HGF785S7</td>
-                            <td>Simplon</td>
+                            <td>{{ $inactiveAssoc->association_ninea  }}</td>
+                            <td>{{ $inactiveAssoc->name  }}</td>
                             <td class="action_btn">
                                 <button class="btn-action1 validate">Valider</button>
                                 <button class="btn-action2 reject">Refuser</button>
                             </td>
                         </tr>
+@endforeach
                     </tbody>
                 </table>
             </section>
@@ -248,24 +260,14 @@ color: #FFF;
 <div class="section_ajout">
 <div class="add-role-form">
                 <h2>Ajouter Rôle</h2>
-                <form action="#">
+                <form action="{{ route('admin.roles.store') }}">
                     <div class="p1">
-                    <label for="role-name">Nom du Rôle:</label>
-                    <input type="text" id="role-name" name="role-name" required>
+                    <label for="name">Nom du rôle :</label>
+            <input type="text" name="name" class="form-control" id="name" required>
                 </div>
                     <button type="submit">Ajouter</button>
                 </form>
             </div>
-            <!-- <div class="add-role-form2">
-                <h2>Ajouter Rôle</h2>
-                <form action="#">
-                    <div class="p1">
-                    <label for="role-name">Nom du Rôle:</label>
-                    <input type="text" id="role-name" name="role-name" required>
-                </div>
-                    <button type="submit">Ajouter</button>
-                </form>
-            </div> -->
 </div>
   
 </div>
@@ -277,6 +279,14 @@ color: #FFF;
         align-items: center;
         gap: 50px;
     }
+    .pending-associations h2{
+        color: #1E4C72;
+font-family: Montserrat;
+font-size: 16px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+    }
 .liste_association{
     width: 600px;
     margin-top: 50px;
@@ -287,6 +297,16 @@ color: #FFF;
     width: 100%;
     border-collapse: collapse;
     border: 1px solid #ddd;
+}
+.user{
+    color: #1E2172;
+font-family: Montserrat;
+font-size: 24px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+margin-top: 90px;
+margin-left: 34px;
 }
 
 th, td {
@@ -317,7 +337,6 @@ height: 35px;
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    gap: 20px;
 }
 .btn-action2 {
     background-color: #D6111A;
@@ -398,5 +417,181 @@ flex-shrink: 0;
 
 .add-role-form button:hover {
     background-color: #45a049;
+}
+</style>
+
+<style>
+    
+    
+   
+    .page{
+
+        display: flex;
+        flex-direction:row;
+    }
+    .contenu-page{
+        margin-left: 35px;
+        margin-top: 35px;
+    }
+    .body{
+background-color: #FFF;
+    }
+    .btn-add{
+        display: inline-flex;
+        padding: 4px 8px;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        border-radius: 8px;
+        background: #1E4C72;
+        color: var(--couleur-primaire, #FFF);
+        text-align: center;
+        font-family: Montserrat;
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+    }
+    .imgPartie img{
+        width: 178px;
+height: 350px;
+flex-shrink: 0;
+border-radius: 12px 0px 0px 12px;
+
+    }
+    .cardEvent{
+        margin-top: 20px;
+        display: flex;
+        flex-direction: row;
+        width: 500px;
+        height: 350px;
+        flex-shrink: 0;
+        border-radius: 12px;
+        background: var(--couleur-primaire, #FFF);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre portée */
+
+    }
+    .titre{
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        margin-left: 20px;
+        margin-top: 25px;
+        color: #1E4C72;
+        text-align: center;
+        font-family: Montserrat;
+        font-size: 24px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+    }
+    .dateHeure, .lieuBillet, .association{
+        display: flex;
+        gap: 20px;
+        flex-direction: row;
+        color: #1E4C72;
+        text-align: center;
+        font-family: Montserrat;
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 700;
+        margin: 0px;
+        margin-top: 18px;
+        margin-left: 40px;
+        line-height: normal;
+
+    }
+    .date, .heure, .lieu ,.billet , .association{
+        display: flex;
+        gap: 4px;
+        align-items: center;
+        text-align: center;
+    }
+    .btn_add_delte{
+        display: flex;
+        flex-direction: row;
+        gap: 20px;
+        align-items: center;
+        text-align: center;
+        margin-left: 1px;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+    .btn_add{
+        display: flex;
+        width: 100px;
+height: 45px;
+padding: 10px;
+justify-content: center;
+align-items: center;
+gap: 10px;
+flex-shrink: 0;
+border-radius: 8px;
+background: linear-gradient(0deg, #068632 0%, #068632 100%), linear-gradient(0deg, #068632 0%, #068632 100%), #068632;
+color: var(--couleur-primaire, #FFF);
+text-align: center;
+font-family: Montserrat;
+font-size: 12px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+margin-top: 22px;
+    }
+
+.btn_delete{
+    display: flex;
+width: 100px;
+height: 60px;
+padding: 10px;
+justify-content: center;
+align-items: center;
+gap: 10px;
+flex-shrink: 0;
+border-radius: 8px;
+background:#D6111A;
+color: var(--couleur-primaire, #FFF);
+text-align: center;
+font-family: Montserrat;
+font-size: 12px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+margin-top: 30px;
+border: 0px;
+    }
+    a{
+        text-decoration: none;
+        color: #FFF;
+    }
+    .nav-bar{
+        width: 100%;
+height: 80px;
+flex-shrink: 0;
+border-radius: 0px 0px 12px 12px;
+background: #1E4C72;
+    }
+    .eventContainer{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+        gap: 25px;
+    }
+.competeur{
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 170px;
+}
+.compteur-item{
+    display: flex;
+    flex-direction: column;
+width: 386px;
+height: 174px;
+justify-content: center;
+align-items: center;
+flex-shrink: 0;
+border-radius: 12px;
+background: #01054E;
+color: #FFF;
 }
 </style>

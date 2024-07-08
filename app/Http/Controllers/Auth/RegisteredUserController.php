@@ -61,48 +61,50 @@ class RegisteredUserController extends Controller
      * @throws \Illuminate\Validation\ValidationException
      */
     public function registerAssociation(Request $request)
-    {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'association_nom' => ['required', 'string'],
-            'association_description' => ['nullable', 'string'],
-            'association_logo' => ['nullable', 'image', 'max:2048'], // Validation pour l'image du logo
-            'association_localisation' => ['nullable', 'string'],
-            'association_numero' => ['nullable', 'string'],
-            'association_secteur_activite' => ['nullable', 'string'],
-            'association_ninea' => ['nullable', 'string'],
-            'association_date_creation' => ['nullable', 'date'],
-            'association_statut' => ['nullable', 'string'],
-        ]);
+{
+    dd($request->all());
+    $request->validate([
+        'name' => ['required', 'string', 'max:255'],
+        'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+        'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        'association_nom' => ['required', 'string'],
+        'association_description' => ['nullable', 'string'],
+        'association_logo' => ['nullable', 'image', 'max:2048'], // Validation pour l'image du logo
+        'association_localisation' => ['nullable', 'string'],
+        'association_numero' => ['nullable', 'string'],
+        'association_secteur_activite' => ['nullable', 'string'],
+        'association_ninea' => ['nullable', 'string'],
+        'association_date_creation' => ['nullable', 'date'],
+        'association_statut' => ['nullable', 'string'],
+    ]);
 
-        // Traitement de l'upload du logo
-        if ($request->hasFile('association_logo')) {
-            $file = $request->file('association_logo');
-            $fileName = time() . '_' . $file->getClientOriginalName();
-            $file->storeAs('public/association_logos', $fileName); // Stockage local dans le dossier public/association_logos
-        } else {
-            $fileName = null; // Ajustement pour gérer le cas où aucun logo n'est téléchargé
-        }
-
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => 'association',
-            'association_nom' => $request->association_nom,
-            'association_description' => $request->association_description,
-            'association_logo' => $fileName ? 'public/association_logos/' . $fileName : null, // Sauvegarde du chemin du logo
-            // Ajoutez d'autres champs associatifs ici
-        ]);
-
-        event(new Registered($user));
-
-        Auth::login($user);
-
-        return redirect()->intended('/dashboard/association');
+    // Traitement de l'upload du logo
+    if ($request->hasFile('association_logo')) {
+        $file = $request->file('association_logo');
+        $fileName = time() . '_' . $file->getClientOriginalName();
+        $file->storeAs('public/association_logos', $fileName); // Stockage local dans le dossier public/association_logos
+    } else {
+        $fileName = null; // Ajustement pour gérer le cas où aucun logo n'est téléchargé
     }
+
+    $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => Hash::make($request->password),
+        'role' => 'association',
+        'association_nom' => $request->association_nom,
+        'association_description' => $request->association_description,
+        'association_logo' => $fileName ? 'public/association_logos/' . $fileName : null, // Sauvegarde du chemin du logo
+        // Ajoutez d'autres champs associatifs ici
+    ]);
+
+    event(new Registered($user));
+
+    Auth::login($user);
+
+    return redirect()->intended('/dashboard/association');
+}
+
 
     /**
      * Affiche le formulaire d'enregistrement pour les administrateurs.

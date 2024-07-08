@@ -1,6 +1,7 @@
 <?php
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EvenementController;
 use App\Http\Controllers\ReservationController;
@@ -109,7 +110,7 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
 });
 
 
- 
+Route::get('/reservations/{id}', 'ReservationController@show')->name('reservations.show');
 
 require __DIR__.'/auth.php';
 
