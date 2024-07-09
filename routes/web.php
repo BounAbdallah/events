@@ -88,11 +88,19 @@ Route::middleware(['auth', 'verified', 'association', 'checkAssociationStatus'])
 
 Route::middleware(['auth', 'verified', 'admin'])->group(function () {
     Route::get('/admin/users', [RegisteredUserController::class, 'index'])->name('admin.users.index');
-    // web.php
+
 Route::get('/admin/dashboard', [DashboardAdminController::class, 'index'])->name('admin.dashboard');
 
-    Route::get('/admin/users/{id}/edit', [RegisteredUserController::class, 'editRole'])->name('admin.users.edit');
-    Route::put('/admin/users/{id}', [RegisteredUserController::class, 'updateRole'])->name('admin.users.update');
+
+Route::get('/admin/dashboard', [DashboardAdminController::class, 'index'])->name('admin.dashboard');
+Route::post('/admin/roles', [DashboardAdminController::class, 'storeRole'])->name('admin.roles.store');
+Route::put('/admin/roles/{role}', [DashboardAdminController::class, 'updateRole'])->name('admin.roles.update');
+Route::delete('/admin/roles/{role}', [DashboardAdminController::class, 'destroyRole'])->name('admin.roles.destroy');
+// Route::get('/admin/roles', [RoleController::class, 'index'])->name('admin.roles.index');
+// Route::get('/admin/roles/{role}/edit', [RoleController::class, 'edit'])->name('admin.roles.edit');
+// Route::post('/admin/roles', [RoleController::class, 'store'])->name('admin.roles.store');
+// Route::put('/admin/roles/{role}', [RoleController::class, 'update'])->name('admin.roles.update');
+// Route::delete('/admin/roles/{role}', [RoleController::class, 'destroy'])->name('admin.roles.destroy');
 });
 
 Route::middleware(['auth', 'verified' , 'user'])->group(function () {

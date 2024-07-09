@@ -194,26 +194,24 @@ line-height: normal;
 }
 </style>
 <div class="body">
-@if (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
 
-@if (session('error'))
-    <div class="alert alert-danger">
-        {{ session('error') }}
+    @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
+    <div class="nav-bar"></div>
+    <div class="user">
+        @auth
+            <p>{{ Auth::user()->name }} Bienvenue dans votre espace de travail!</p>
+        @endauth
     </div>
-@endif
-<div class="nav-bar">
-
-</div>
-<div class="user">
-@auth
-    <p>{{ Auth::user()->name }} Bienvenue dans votre espace de travail!</p>
-@endauth
-</div>
-<div class="competeur">
+    <div class="competeur">
         <div class="compteur-item">
             <span>{{ $inactiveAssociationsCount }}</span>
             <p>Association Inactive</p>
@@ -226,11 +224,11 @@ line-height: normal;
             <span>{{$totalEvenements}}</span>
             <p>Evenement total</p>
         </div>
-        </div>
-<div class="page">
-    
-<div class="liste_association">
-<section class="pending-associations">
+    </div>
+
+    <div class="page">
+        <div class="liste_association">
+            <section class="pending-associations">
                 <h2>Liste des Association en attente de validation</h2>
                 <table class="associations-table">
                     <thead>
@@ -241,36 +239,63 @@ line-height: normal;
                         </tr>
                     </thead>
                     <tbody>
-                    <tbody>
-       @foreach($inactiveAssociations as $inactiveAssoc) 
-
-                        <tr>
-                            <td>{{ $inactiveAssoc->association_ninea  }}</td>
-                            <td>{{ $inactiveAssoc->name  }}</td>
-                            <td class="action_btn">
-                                <button class="btn-action1 validate">Valider</button>
-                                <button class="btn-action2 reject">Refuser</button>
-                            </td>
-                        </tr>
-@endforeach
+                        
+                        @foreach($inactiveAssociations as $inactiveAssoc)
+                            <tr>
+                                <td>{{ $inactiveAssoc->association_ninea }}</td>
+                                <td>{{ $inactiveAssoc->name }}</td>
+                                <td class="action_btn">
+                                    <button class="btn-action1 validate">Valider</button>
+                                    <button class="btn-action2 reject">Refuser</button>
+                                </td>
+                            </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </section>
-</div>
-<div class="section_ajout">
-<div class="add-role-form">
+        </div>
+
+        <div class="section_ajout">
+            <div class="add-role-form">
                 <h2>Ajouter Rôle</h2>
-                <form action="{{ route('admin.roles.store') }}">
+                <form action="{{ route('admin.roles.store') }}" method="POST">
+                    @csrf
                     <div class="p1">
-                    <label for="name">Nom du rôle :</label>
-            <input type="text" name="name" class="form-control" id="name" required>
-                </div>
+                        <label for="name">Nom du rôle :</label>
+                        <input type="text" name="name" class="form-control" id="name" required>
+                    </div>
                     <button type="submit">Ajouter</button>
                 </form>
             </div>
-</div>
-  
-</div>
+
+            <div class="add-role-form2">
+                <h2>Liste des Rôles</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($roles as $role)
+                            <tr>
+                                <td>{{ $role->name }}</td>
+                                <td class="action_btn">
+                                    <form action="{{ route('admin.roles.destroy', $role) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce rôle ?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn_delete">Supprimer</button>
+                                    </form>
+                                    <a href="{{ route('admin.roles.update', $role) }}" class="btn_edit">Modifier</a>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 <style>
