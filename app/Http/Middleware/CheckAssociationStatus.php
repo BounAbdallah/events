@@ -11,7 +11,7 @@ class CheckAssociationStatus
     public function handle(Request $request, Closure $next)
     {
         if (Auth::check() && Auth::user()->role === 'association' && Auth::user()->association_statut !== 'active') {
-            return redirect()->route('home')->withErrors(['Votre compte est inactif. Contactez l\'administrateur pour plus d\'informations.']);
+            return redirect()->route('home','association.reservation')->withErrors(['Votre compte est inactif. Contactez l\'administrateur pour plus d\'informations.']);
         }
 
         return $next($request);

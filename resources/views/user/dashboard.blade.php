@@ -1,3 +1,6 @@
+
+<x-bar-navigation/>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -206,3 +209,4 @@
     </div>
 </body>
 </html>
+
