@@ -1,5 +1,5 @@
 <?php
-// App\Http\Controllers\ReservationController.php
+
 
 namespace App\Http\Controllers;
 
@@ -16,14 +16,13 @@ class ReservationController extends Controller
 {
     public function create(Evenement $evenement)
     {
-
-        $evenement = Evenement::findOrFail($id_evenement);
+        $evenement = Evenement::findOrFail($evenement->id);
 
         if ($evenement->places_disponibles <= 0) {
             return redirect()->route('home')->with('error', 'Il n\'y a plus de places disponibles pour cet événement.');
         }
 
-        $existingReservation = Reservation::where('id_evenement', $id_evenement)
+        $existingReservation = Reservation::where('id_evenement', $evenement->id)
             ->where('id_user', Auth::id())
             ->first();
 
@@ -32,9 +31,9 @@ class ReservationController extends Controller
         }
 
         $reservation = Reservation::create([
-            'id_evenement' => $id_evenement,
+            'id_evenement' => $evenement->id,
             'id_user' => Auth::id(),
-            'statut' => Reservation::STATUS_PENDING, // Utilisation de la constante de statut
+            'statut' => Reservation::STATUS_PENDING,
         ]);
 
         Notification::send($reservation->user, new ReservationMade($reservation));
@@ -42,33 +41,29 @@ class ReservationController extends Controller
         return redirect()->route('home')->with('success', 'Réservation créée et email de confirmation envoyé!');
     }
 
-
     public function show($id)
     {
         $reservation = Reservation::findOrFail($id);
         return view('reservations.show', compact('reservation'));
     }
 
-
-    public function edit($id)
-
+    public function edit(Evenement $evenement)
+    {
         $user = Auth::user();
         return view('reservations.create', compact('evenement', 'user'));
     }
 
     public function store(Request $request, Evenement $evenement)
-
     {
         $user = Auth::user();
 
         Reservation::create([
-            'id_user' => Auth::user()->id,
+            'id_user' => $user->id,
             'id_evenement' => $evenement->id,
-            'statut' => 'en attente', // Valeur par défaut
+            'statut' => 'en attente',
         ]);
 
         // Envoyer l'email de confirmation ici si nécessaire
-
 
         return redirect()->intended('events')->with('success', 'Statut de la réservation mis à jour avec succès.');
     }
@@ -84,30 +79,26 @@ class ReservationController extends Controller
         $reservations = Reservation::paginate(10);
         return view('association.reservation', compact('reservations'));
     }
-    
-
 
     public function search(Request $request)
-{
-    $query = $request->input('query');
+    {
+        $query = $request->input('query');
 
-    $reservations = Reservation::whereHas('user', function ($queryBuilder) use ($query) {
-        $queryBuilder->where('name', 'like', "%$query%");
-    })
-    ->orWhereHas('evenement', function ($queryBuilder) use ($query) {
-        $queryBuilder->where('nom', 'like', "%$query%");
-    })
-    ->orWhereDate('created_at', 'like', "%$query%")
-    ->paginate(10);
+        $reservations = Reservation::whereHas('user', function ($queryBuilder) use ($query) {
+            $queryBuilder->where('name', 'like', "%$query%");
+        })
+        ->orWhereHas('evenement', function ($queryBuilder) use ($query) {
+            $queryBuilder->where('nom', 'like', "%$query%");
+        })
+        ->orWhereDate('created_at', 'like', "%$query%")
+        ->paginate(10);
 
-    return view('association.reservation', compact('reservations'));
-}
+        return view('association.reservation', compact('reservations'));
+    }
 
-    
-}
-
+    public function confirm(Evenement $evenement)
+    {
         return redirect()->route('reservations.create', ['evenement' => $evenement->id])
             ->with('success', 'Votre réservation a été confirmée.');
     }
 }
-

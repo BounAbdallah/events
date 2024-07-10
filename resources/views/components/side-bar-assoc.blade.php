@@ -15,7 +15,7 @@
             <img src="{{ asset('images/local_activity_') }}" alt="favicon événement">
             <h3>Evénement</h3>
         </a>
-        <a href="/liste_reservations">
+        <a href="{{ route('association.reservation') }}s">
             <img src="{{ asset('images/icon_home.png') }}" alt="favicon inscrits">
             <h3>Inscrits</h3>
         </a>
