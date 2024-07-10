@@ -176,8 +176,9 @@ background: #1E4C72;
 
 </div>
 <div class="page">
-    
+
 <x-side-barAssoc />
+
 
 <div class="contenu-page">
     <div class="sction-btn">

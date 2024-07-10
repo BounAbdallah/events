@@ -189,6 +189,50 @@ font-style: normal;
 font-weight: 600;
 line-height: normal;
 }
+
+.event-image {
+            width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+        .event-block {
+            width: 100px;
+            height: 100px;
+            background-color: #d9534f;
+            margin-bottom: 40px;
+            margin-left: -100px;
+            border-radius: 10px;
+        }
+        .content-section {
+            margin-top: 50px;
+        }
+        .offers-title {
+            text-align: center;
+            font-weight: bold;
+            color: #002366;
+            margin-bottom: 30px;
+        }
+        .event-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .event-list li {
+            margin-bottom: 10px;
+            color: #002366;
+            font-weight: bold;
+        }
+        .offres{
+            display: flex;
+        }
+        .block2{
+            margin-left: -100px;
+            margin-top: 80px;
+        }
+        .block3{
+            margin-left: -100px;
+            margin-top: 180px;
+        }
+=======
 .nav{
 width: 100%;
 height: 75px;
@@ -394,6 +438,7 @@ font-style: normal;
 font-weight: 400;
 line-height: normal;
 }
+
     </style>
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
@@ -407,10 +452,10 @@ line-height: normal;
         {{ session('success') }}
     </div>
 @endif
-
 @if (session('error'))
     <div class="alert alert-danger">
         {{ session('error') }}
+
     </div>
 @endif
 
@@ -485,6 +530,22 @@ line-height: normal;
         </div>
     </section>
 
+
+    <div class="container content-section">
+        <h2 class="offers-title">Nos Offres</h2>
+        <div class="row offres">
+            <div class="col-md-3 block1">
+            <div class="event-block"></div>
+                <img src=" {{asset('images/Rectangle 50.png')}}" alt="">
+                <img src=" {{asset('images/Rectangle 50.png')}}" alt="">
+                <img src=" {{asset('images/Rectangle 51.png')}}" alt="">
+                <img src=" {{asset('images/Rectangle 52.png')}}" alt="">
+            </div>
+            <div class="col-md-3 block2">
+            <img src=" {{asset('images/Rectangle 54.png')}}" alt="">
+                <img src=" {{asset('images/Rectangle 55.png')}}" alt="">
+                <img src=" {{asset('images/Rectangle 56.png')}}" alt="">
+
     <section>
     <h3>Nos Offres</h3>
 
@@ -504,13 +565,25 @@ line-height: normal;
                 <img src="{{ asset('images/Rectangle 67.png') }}" alt="">
             <img src="{{ asset('images/Rectangle 67.png') }}" alt="">
 
-            </div>
-
-            <div class="images3">
-            <img src="{{ asset('images/Rectangle 67.png') }}" alt="">
-            <img src="{{ asset('images/Rectangle 67.png') }}" alt="">
 
             </div>
+            <div class="col-md-3 block3">
+            <img src=" {{asset('images/Rectangle 57.png')}}" alt="">
+                <img src=" {{asset('images/Rectangle 58.png')}}" alt="">
+                <img src=" {{asset('images/Rectangle 52.png')}}" alt="">
+            </div>
+            <div class="col-md-3">
+                <h4>Des événements sur :</h4>
+                <ul class="event-list">
+                    <li>La prise de parole en public</li>
+                    <li>La maîtrise de l’art</li>
+                    <li>Ateliers Culturels</li>
+                    <li>L’essor de la technologie</li>
+                    <li>Comment faire partie du progrès</li>
+                </ul>
+            </div>
+        </div>
+    </div>
 
             <div class="text-offres">
                 <h2 class="titre">Des événements sur :</h2>
@@ -520,9 +593,15 @@ line-height: normal;
                     <p>Trouvez des formations gratuites et payantes</p>
                     <p>Découvrez nos offres d'emploi et de stage</p>
                 </div>
+
             </div>
             </div>
+            
         </div>
+        @endforeach
+
+    </div>
+
     </section>
     <section class="partenaires">
         <div class="groupe1">

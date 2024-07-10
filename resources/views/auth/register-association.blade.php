@@ -15,6 +15,8 @@
 
         .conatainer{
             background-image: url('');
+            display: flex;
+            flex-direction: column;
         }
         .form-container {
             max-width: 900px;
@@ -118,13 +120,13 @@
         @csrf
 
         <!-- Email Address -->
-        <div>
+        <div class="mb-3">
             <x-input-label for="name" :value="__('Nom complet')" />
             <input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" placeholder="Entrez votre prénom et nom"/>
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
 
-        <div>
+        <div  class="mb-3">
             <x-input-label for="email" :value="__('Email')" />
             <input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="name" placeholder="Entrez l'email"/>
             <x-input-error :messages="$errors->get('email')" class="mt-2" />

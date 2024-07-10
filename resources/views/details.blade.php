@@ -144,41 +144,109 @@ line-height: normal;
     color: #D6111A;
 }
 
-</style>
+
+    .card-body {
+      display: flex;
+    
+    }
+    .card-text{
+      width: 550px;
+      font-size: 14px;
+      text-align: justify;
+      font-weight: 500;
+    }
+    .description{
+      margin-left: 80px;
+    }
+    .card-img-top{
+      height: 300px;
+      width: 500px;
+      margin-bottom: 35px;
+    }
+    .btn-reserve {
+      background-color: #fff;
+      color: #068632;
+      border: 2px solid #068632;
+      border-radius: 10px;
+      padding: 10px 20px;
+      cursor: pointer;
+      width: 560px;
+      height: 50px;
+      margin-top: 30px;
+      transition: background-color 0.3s ease;
+    }
+    .btn-reserve:hover {
+      background-color: #068632;
+      color: #fff;
+    }
+    .header{
+      display:flex;
+      margin:25px;
+      margin-top: 50px;
+      margin-bottom: 50px;
+
+    }
+.card-title {
+  font-size: 22px;
+  color: #6E6E6E;
+  margin-left: -115px;
+}
+.card-place{
+  margin-left: 250px;
+}
+.annuler{
+  color:red;
+}
+.image{
+  display:flex;
+  flex-direction: column;
+  .annuler{
+    margin-top: 100px;
+    margin-left: -440px;
+  }
+}
+p{
+    font-weight: 500;
+    font-size: 15px;
+}
+  </style>
+</head>
+<body>
+  
+
+
 <body><x-bar-navigation/>
 
+<div class="container mt-4">
+    <div class="card">
+      <div class="header">
+      <p class="card-text"><small class="text-muted">Catégorie :{{ $evenement->categorie }}</small></p>
+    <h5 class="card-title">{{ $evenement->nom }}</h5>
+      <p class="card-place"><small class="text-muted">Nombre de places libres : {{ $evenement->nombre_places }}</small></p>
+      </div>
 
-<div class="contenaire">
-    <div class="infos-principal">
-        <p><strong>Date:</strong> {{ $evenement->categorie }}</p>
-        <p><strong>Date:</strong> {{ $evenement->nom }}</p>
-        <p><strong>Date:</strong> {{ $evenement->nombre_places }}</p>
+      <div class="card-body">
+        <div class="image">
+        <img src="{{ $evenement->image }}" class="card-img-top" alt="{{ $evenement->image }}">
+        <p> Lieu de l'événement : {{ $evenement->lieu }}, le {{ $evenement->date_evenement }} </p>
+        <p> Début de programme : {{ $evenement->heure_debut }}</p>
+        <p> Fin de programme : {{ $evenement->heure_fin }}</p>
+        <a href="{{ route('home') }}" class="annuler">Annuler</a>
+        </div>
+
+        <!-- <p class="card-text"><small class="text-muted">{{ $evenement->created_at}}</small></p> -->
+         <div class="description">
+         <p class="card-text">Description : <br>  <br>  {{  $evenement->description }}</p>
+         <a href="{{ route('reservations.create', $evenement->id) }}" class="btn btn-reserve">Réserver ma place</a>
+
+         </div>
+      </div>
 
     </div>
-    <div class="infos2">
-        <div class="partie1">
-             <img src="{{ asset('images/' . $evenement->image) }}" alt="{{ $evenement->nom }}" >
-    <p><strong>Lieu de l'evenemnt:</strong> {{ $evenement->lieu }}</p>
-    <p><strong>Date de l'evenement </strong> {{ $evenement->date_evenement }}</p>
-    <p><strong>Heure de derooulement </strong> {{ $evenement->heure_debut }} - {{ $evenement->heure_fin }}</p>
-    <p><strong>Date de l'evenement </strong> {{ $evenement->date_cloture_inscription }}</p>
-    <a href="{{ route('home') }}" class="btn_ ">Annuler</a>
 
-
-        </div>
-        <div class="partie2">
-            <h2>Description :</h2>
-    <p><strong>Description:</strong> {{ $evenement->description }}</p>
-    
-    <form action="{{ route('reservations.store', $evenement->id) }}" method="POST" class="custom-form">
-    @csrf
-    <a href="{{ route('reservations.create', $evenement->id) }}" class="btn btn-reserve">Réserver ma place</a>
-    </form>
-
-        </div>
     </div>
-</div>
 <x-footer />
+
 
 </body>
 </html>

@@ -10,6 +10,8 @@ use App\Http\Controllers\AssociationStatusController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\DashboardAssociationController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DashboardUserController;
 
 //Route pour accueil 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -116,9 +118,23 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
     Route::get('admin/associations', [AssociationStatusController::class, 'index'])->name('admin.associations.index');
     Route::post('admin/associations/{id}/status', [AssociationStatusController::class, 'updateStatus'])->name('admin.associations.updateStatus');
 });
+ 
+// Route pour afficher le tableau de bord de l'utilisateur
+Route::get('/user/dashboard', [DashboardUserController::class, 'index'])->name('user.dashboard')->middleware('auth');
+Route::get('user/events', [DashboardUserController::class, 'index'])->name('user.events');
+
+// Route pour mettre à jour le profil depuis le tableau de bord
+Route::patch('/user/dashboard/update', [DashboardUserController::class, 'update'])->name('dashboarduser.update')->middleware('auth');
+
+Route::get('/user/events', [DashboardUserController::class, 'events'])->name('user.events');
+
+
+
+
 
 
 Route::get('/reservations/{id}', 'ReservationController@show')->name('reservations.show');
 
 require __DIR__.'/auth.php';
+
 
